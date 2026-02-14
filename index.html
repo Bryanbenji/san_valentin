@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feliz San Valentín Moni</title>
+
+    <style>
+        :root {
+            /* ✅ Siempre "Brillante" */
+            --bg0: #2a0b3b;
+            --bg1: #4a146a;
+            --bg2: #6b1a93;
+
+            --violet: #a55cff;
+            --violet2: #d5b3ff;
+            --pink: #ff6ad5;
+
+            --ink: #f7f2ff;
+            --shadow: 0 18px 50px rgba(0, 0, 0, .45);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            color: var(--ink);
+            background:
+                radial-gradient(1200px 800px at 20% 15%, rgba(165, 92, 255, .30), transparent 60%),
+                radial-gradient(1000px 700px at 80% 10%, rgba(255, 106, 213, .22), transparent 55%),
+                linear-gradient(180deg, var(--bg0), var(--bg1) 40%, var(--bg2));
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Canvas de fondo */
+        canvas#bg {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Aurora */
+        .aurora {
+            position: fixed;
+            inset: -20%;
+            z-index: 1;
+            pointer-events: none;
+            filter: blur(40px) saturate(1.25);
+            opacity: .75;
+            background:
+                radial-gradient(closest-side at 30% 25%, rgba(165, 92, 255, .42), transparent 60%),
+                radial-gradient(closest-side at 70% 30%, rgba(255, 106, 213, .30), transparent 55%),
+                radial-gradient(closest-side at 50% 80%, rgba(213, 179, 255, .28), transparent 60%);
+            transform: translate3d(0, 0, 0);
+            animation: drift 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translate3d(-2%, -1%, 0) scale(1.02);
+            }
+
+            100% {
+                transform: translate3d(2%, 1%, 0) scale(1.05);
+            }
+        }
+
+        /* ✅ Overlay con TU imagen (pattern.png) */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background-image: url("pattern.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: .18;
+            mix-blend-mode: soft-light;
+            filter: saturate(1.15) contrast(1.05);
+            transform: translateZ(0);
+        }
+
+        /* Contenido */
+        .wrap {
+            position: relative;
+            z-index: 2;
+            min-height: 100svh;
+            display: grid;
+            place-items: center;
+            padding: clamp(16px, 3vw, 28px);
+        }
+
+        .card {
+            width: min(980px, 100%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .05));
+            border: 1px solid rgba(255, 255, 255, .16);
+            box-shadow: var(--shadow);
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            background:
+                radial-gradient(600px 220px at 30% 0%, rgba(165, 92, 255, .45), transparent 60%),
+                radial-gradient(500px 200px at 80% 10%, rgba(255, 106, 213, .32), transparent 60%);
+            opacity: .65;
+            pointer-events: none;
+        }
+
+        .top {
+            padding: clamp(18px, 3vw, 28px);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .badge {
+            width: fit-content;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .16);
+            background: rgba(255, 255, 255, .07);
+            font-size: 12px;
+            letter-spacing: .2px;
+            opacity: .95;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(28px, 4vw, 44px);
+            line-height: 1.06;
+            letter-spacing: -.02em;
+            text-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+        }
+
+        .sub {
+            margin: 0;
+            opacity: .92;
+            font-size: clamp(14px, 1.6vw, 16px);
+            line-height: 1.5;
+            max-width: 70ch;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 6px;
+            align-items: center;
+        }
+
+        .btn {
+            appearance: none;
+            border: 1px solid rgba(255, 255, 255, .18);
+            background: rgba(255, 255, 255, .09);
+            color: var(--ink);
+            padding: 10px 12px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: transform .12s ease, background .18s ease, border-color .18s ease;
+            font-weight: 600;
+            letter-spacing: .2px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            user-select: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, .13);
+            border-color: rgba(255, 255, 255, .26);
+        }
+
+        .btn.primary {
+            background: linear-gradient(135deg, rgba(165, 92, 255, .42), rgba(255, 106, 213, .25));
+            border-color: rgba(255, 255, 255, .28);
+        }
+
+        .hint {
+            font-size: 12px;
+            opacity: .88;
+        }
+
+        /* Jardín */
+        .garden {
+            position: relative;
+            height: clamp(340px, 44vh, 470px);
+            border-top: 1px solid rgba(255, 255, 255, .12);
+            overflow: hidden;
+            background:
+                radial-gradient(900px 260px at 50% 120%, rgba(0, 0, 0, .52), transparent 60%),
+                linear-gradient(180deg, rgba(0, 0, 0, .04), rgba(0, 0, 0, .18));
+        }
+
+        .soil {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -60px;
+            height: 220px;
+            background:
+                radial-gradient(900px 160px at 50% 10%, rgba(165, 92, 255, .22), transparent 65%),
+                radial-gradient(900px 180px at 50% 30%, rgba(255, 106, 213, .12), transparent 70%),
+                linear-gradient(180deg, rgba(10, 4, 16, 0), rgba(10, 4, 16, .75));
+            transform: translateZ(0);
+        }
+
+        /* Tulipanes */
+        .tulip {
+            position: absolute;
+            bottom: 24px;
+            width: 80px;
+            height: 240px;
+            transform: translateX(-50%) scale(var(--s, 1)) rotate(var(--r, 0deg));
+            transform-origin: bottom center;
+            filter: drop-shadow(0 20px 25px rgba(0, 0, 0, .35));
+            cursor: pointer;
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .stem {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 10px;
+            height: 160px;
+            transform: translateX(-50%);
+            border-radius: 999px;
+            background: linear-gradient(180deg, #1f8a4b, #0f5c33);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+        }
+
+        .leaf {
+            position: absolute;
+            bottom: 40px;
+            width: 44px;
+            height: 84px;
+            background: linear-gradient(180deg, #2ecf73, #0f5c33);
+            border-radius: 80px 80px 80px 10px;
+            opacity: .95;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+            transform-origin: bottom left;
+        }
+
+        .leaf.left {
+            left: 18px;
+            transform: rotate(-28deg);
+        }
+
+        .leaf.right {
+            right: 14px;
+            transform: scaleX(-1) rotate(-16deg);
+            bottom: 52px;
+            opacity: .9;
+        }
+
+        .head {
+            position: absolute;
+            left: 50%;
+            top: 16px;
+            width: 64px;
+            height: 74px;
+            transform: translateX(-50%);
+        }
+
+        .petal {
+            position: absolute;
+            inset: 0;
+            border-radius: 22px 22px 28px 28px;
+            background: linear-gradient(180deg, rgba(213, 179, 255, 1), rgba(165, 92, 255, 1) 40%, rgba(90, 18, 153, 1));
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 255, 255, .18),
+                inset 0 -16px 24px rgba(0, 0, 0, .25);
+            clip-path: path("M 32 4 C 52 10, 62 26, 58 44 C 55 60, 45 72, 32 74 C 19 72, 9 60, 6 44 C 2 26, 12 10, 32 4 Z");
+        }
+
+        .petal::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 10px;
+            width: 18px;
+            height: 44px;
+            transform: translateX(-50%);
+            border-radius: 999px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, .38), transparent);
+            opacity: .55;
+            filter: blur(.2px);
+        }
+
+        .petal.p2 {
+            transform: rotate(-12deg) translateX(-4px);
+            opacity: .92;
+        }
+
+        .petal.p3 {
+            transform: rotate(12deg) translateX(4px);
+            opacity: .92;
+        }
+
+        .glow {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 120px;
+            height: 120px;
+            transform: translate(-50%, -34%);
+            background: radial-gradient(circle, rgba(165, 92, 255, .42), transparent 60%);
+            filter: blur(6px);
+            opacity: .9;
+            pointer-events: none;
+        }
+
+        .windy {
+            animation: sway var(--w, 3.8s) ease-in-out infinite alternate;
+        }
+
+        @keyframes sway {
+            0% {
+                transform: translateX(-50%) scale(var(--s, 1)) rotate(calc(var(--r, 0deg) - 2deg));
+            }
+
+            100% {
+                transform: translateX(-50%) scale(var(--s, 1)) rotate(calc(var(--r, 0deg) + 2deg));
+            }
+        }
+
+        /* ✅ Stitch sticker */
+        .stitch {
+            position: absolute;
+            right: clamp(10px, 2vw, 18px);
+            bottom: clamp(6px, 1.4vw, 14px);
+            width: clamp(120px, 22vw, 220px);
+            height: auto;
+            z-index: 5;
+            pointer-events: none;
+            /* no estorba clicks en tulipanes */
+            filter: drop-shadow(0 18px 24px rgba(0, 0, 0, .45));
+            transform: translate3d(0, 0, 0);
+            opacity: .98;
+        }
+
+        /* flotación suave */
+        .stitch.float {
+            animation: floaty 3.4s ease-in-out infinite alternate;
+        }
+
+        @keyframes floaty {
+            from {
+                transform: translate3d(var(--sx, 0px), calc(var(--sy, 0px) - 2px), 0) rotate(-1.5deg);
+            }
+
+            to {
+                transform: translate3d(var(--sx, 0px), calc(var(--sy, 0px) + 6px), 0) rotate(1.5deg);
+            }
+        }
+
+        /* Modal Carta */
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: none;
+            place-items: center;
+            padding: 18px;
+            background: rgba(0, 0, 0, .55);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.show {
+            display: grid;
+        }
+
+        .letter {
+            width: min(680px, 100%);
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, .16);
+            background: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .07));
+            box-shadow: var(--shadow);
+            padding: 18px 18px 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            background: radial-gradient(600px 180px at 20% 0%, rgba(165, 92, 255, .45), transparent 65%),
+                radial-gradient(520px 170px at 85% 10%, rgba(255, 106, 213, .25), transparent 60%);
+            opacity: .65;
+            pointer-events: none;
+        }
+
+        .letter h2 {
+            margin: 0 0 8px 0;
+            font-size: 22px;
+            position: relative;
+        }
+
+        .letter p {
+            margin: 0;
+            line-height: 1.55;
+            opacity: .92;
+            position: relative;
+        }
+
+        .letter .actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 14px;
+            position: relative;
+            flex-wrap: wrap;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 16px;
+            transform: translateX(-50%);
+            z-index: 60;
+            background: rgba(0, 0, 0, .55);
+            border: 1px solid rgba(255, 255, 255, .14);
+            color: var(--ink);
+            padding: 10px 12px;
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .45);
+            display: none;
+            max-width: min(92vw, 560px);
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.25;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        /* ✅ Music box integrado, arriba centrado */
+        .musicbox {
+            position: relative;
+            /* ya NO fixed */
+            left: auto;
+            bottom: auto;
+            z-index: 5;
+
+            width: min(720px, calc(100% - 36px));
+            margin: 0 auto 14px auto;
+
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, .16);
+            background: linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .05));
+            backdrop-filter: blur(12px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, .30);
+
+            padding: 12px 14px 12px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .musicbox::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: 18px;
+            pointer-events: none;
+            background:
+                radial-gradient(520px 160px at 20% 0%, rgba(165, 92, 255, .28), transparent 60%),
+                radial-gradient(520px 160px at 85% 10%, rgba(255, 106, 213, .18), transparent 60%);
+            opacity: .8;
+        }
+
+        .musicbox>* {
+            position: relative;
+        }
+
+
+        /* Ajuste para que no se “pegue” al header */
+        @media (max-width: 720px) {
+            .musicbox {
+                width: calc(100% - 24px);
+                margin: 0 auto 12px auto;
+            }
+        }
+
+
+        .music-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .music-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .disc {
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, .40), rgba(165, 92, 255, .40) 45%, rgba(255, 106, 213, .20));
+            border: 1px solid rgba(255, 255, 255, .18);
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .10);
+            flex: 0 0 auto;
+            overflow: hidden;
+        }
+
+        .disc.spin {
+            animation: spin 2.2s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .music-title b {
+            display: block;
+            font-size: 13px;
+            letter-spacing: .2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 230px;
+        }
+
+        .music-title span {
+            display: block;
+            font-size: 12px;
+            opacity: .85;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 230px;
+        }
+
+        .music-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex: 0 0 auto;
+        }
+
+        .iconbtn {
+            appearance: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, .18);
+            background: rgba(255, 255, 255, .09);
+            color: var(--ink);
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition: transform .12s ease, background .18s ease, border-color .18s ease;
+            user-select: none;
+        }
+
+        .iconbtn:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, .13);
+            border-color: rgba(255, 255, 255, .24);
+        }
+
+        .bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .bar input[type="range"] {
+            width: min(320px, 100%);
+            accent-color: var(--pink);
+        }
+
+        .time {
+            font-variant-numeric: tabular-nums;
+            font-size: 12px;
+            opacity: .9;
+            min-width: 90px;
+            text-align: right;
+            margin-left: auto;
+        }
+
+        /* ✅ Stitch fijo en la esquina derecha del header (donde iba el panel) */
+        .top {
+            position: relative;
+        }
+
+        .stitch-box {
+            position: absolute;
+            right: clamp(14px, 2vw, 22px);
+            top: clamp(14px, 2vw, 22px);
+
+            width: clamp(120px, 18vw, 220px);
+            aspect-ratio: 1 / 1;
+            border-radius: 22px;
+
+            background: rgba(255, 255, 255, .07);
+            border: 1px solid rgba(255, 255, 255, .14);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 18px 50px rgba(0, 0, 0, .35);
+
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+        }
+
+        .stitch-fixed {
+            width: 92%;
+            height: 92%;
+            object-fit: contain;
+            filter: drop-shadow(0 14px 18px rgba(0, 0, 0, .35));
+        }
+
+
+        /* =========================
+          FIX RESPONSIVE (TELÉFONO)
+        ========================= */
+        @media (max-width: 720px) {
+
+            /* que la tarjeta no quede “gigante” y con huecos raros */
+            .wrap {
+                padding: 12px;
+                place-items: start;
+            }
+
+            .card {
+                border-radius: 20px;
+            }
+
+            .top {
+                padding: 16px;
+                gap: 10px;
+            }
+
+            h1 {
+                font-size: 32px;
+                /* más controlado en móvil */
+                line-height: 1.05;
+            }
+
+            .sub {
+                font-size: 15px;
+                line-height: 1.45;
+            }
+
+            /* STITCH: que se vea bien en móvil, centrado y sin deformar */
+            .stitch-box {
+                position: static !important;
+                width: 100% !important;
+                max-width: 360px;
+                margin: 10px auto 0 auto;
+                aspect-ratio: auto !important;
+                padding: 10px;
+                border-radius: 18px;
+            }
+
+            .stitch-fixed {
+                width: min(280px, 92%);
+                height: auto;
+            }
+
+            /* Botones: full width para que no se vea “raro” */
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                margin-top: 8px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 12px 14px;
+                border-radius: 16px;
+            }
+
+            /* Musicbox: compacto y sin desbordes */
+            .musicbox {
+                width: calc(100% - 24px) !important;
+                margin: 12px auto 12px auto;
+                padding: 12px;
+                border-radius: 18px;
+            }
+
+            .music-top {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .music-title {
+                justify-content: center;
+            }
+
+            .music-actions {
+                justify-content: center;
+                width: 100%;
+                gap: 10px;
+            }
+
+            .iconbtn {
+                width: 52px;
+                height: 44px;
+                border-radius: 16px;
+            }
+
+            .bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .bar input[type="range"] {
+                width: 100%;
+            }
+
+            .time {
+                text-align: right;
+                width: 100%;
+                margin-left: 0;
+            }
+
+            /* Jardín: que no quede aplastado en móvil */
+            .garden {
+                height: min(52vh, 420px);
+            }
+        }
+
+        /* Micro-fix extra para móviles muy pequeños */
+        @media (max-width: 380px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .badge {
+                font-size: 11px;
+            }
+
+            .sub {
+                font-size: 14px;
+            }
+        }
+
+
+
+        @media (max-width: 520px) {
+            .musicbox {
+                left: 1%;
+                right: 1%;
+                width: auto;
+            }
+
+            .music-title b,
+            .music-title span {
+                max-width: 170px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .aurora,
+            .windy,
+            .disc.spin,
+            .stitch.float {
+                animation: none !important;
+            }
+
+            .btn,
+            .iconbtn {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="bg" aria-hidden="true"></canvas>
+    <div class="aurora" aria-hidden="true"></div>
+
+    <main class="wrap">
+        <section class="card" role="region" aria-label="Tarjeta de San Valentín">
+            <div class="top">
+                <div class="badge">💜 Feliz San Valentín</div>
+                <h1 id="title">Para ti</h1>
+                <p class="sub" id="subtitle">
+                    Dicen que el morado guarda lo que no se dice en voz alta: calma, magia y un “me importas”.
+                    Hoy te dejo este jardín como recordatorio: aquí siempre hay un lugar bonito para ti.
+                </p>
+
+                <div class="stitch-box" aria-hidden="true">
+                    <img src="https://imagenesparapeques.com/wp-content/uploads/2025/01/Lilo-Stitch-Angel-4-1024x816.png"
+                        alt="Stitch" class="stitch-fixed" loading="lazy" decoding="async" />
+                </div>
+
+                <div class="controls">
+                    <button class="btn primary" id="openLetter" type="button">💌 Abrir carta</button>
+                    <button class="btn" id="shuffle" type="button">🌷 Reordenar tulipanes</button>
+                </div>
+            </div>
+
+            <!-- Music box -->
+            <section class="musicbox" aria-label="Reproductor de música">
+                <div class="music-top">
+                    <div class="music-title">
+                        <div class="disc" id="disc" aria-hidden="true"></div>
+                        <div style="min-width:0">
+                            <b id="trackName">Eres mi cusualidad favorita</b>
+                            <span id="trackHint">Pulsa ▶️ para iniciar</span>
+                        </div>
+                    </div>
+
+                    <div class="music-actions">
+                        <button class="iconbtn" id="playBtn" type="button" aria-label="Play/Pause">▶️</button>
+                        <button class="iconbtn" id="muteBtn" type="button" aria-label="Mute">🔊</button>
+                    </div>
+                </div>
+
+                <div class="bar">
+                    <input id="seek" type="range" min="0" max="1000" value="0" aria-label="Progreso" />
+                    <span class="time" id="time">0:00 / 0:00</span>
+                </div>
+
+                <audio id="audio" preload="metadata" loop>
+                    <source src="Melendi.mp3" type="audio/mpeg" />
+                </audio>
+            </section>
+
+            <div class="garden" id="garden" aria-label="Jardín de tulipanes">
+                <div class="soil" aria-hidden="true"></div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Carta -->
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Carta">
+        <div class="letter">
+            <h2 id="letterTitle">Para alguien muy especial 💜</h2>
+            <p id="letterBody"></p>
+            <div class="actions">
+                <button class="btn" id="closeLetter" type="button">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+        // ===============================
+        // 1) PERSONALIZA TU CARTA
+        // ===============================
+        const LETTER_TITLE = "Para alguien muy especial 💜";
+        const LETTER_BODY =
+            `Hoy quería regalarte algo simple pero con intención, eres una persona maravillosa
+            que admiro mucho, te mereces todo lo bonito de este mundo.
+Gracias por existir en mi vida.
+Feliz San Valentín.`;
+
+        // ===============================
+        // 2) UI Carta
+        // ===============================
+        const qs = (s) => document.querySelector(s);
+        const garden = qs("#garden");
+        const modal = qs("#modal");
+        const toast = qs("#toast");
+
+        qs("#letterTitle").textContent = LETTER_TITLE;
+        qs("#letterBody").textContent = LETTER_BODY;
+
+        qs("#openLetter").addEventListener("click", () => modal.classList.add("show"));
+        qs("#closeLetter").addEventListener("click", () => modal.classList.remove("show"));
+        modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("show"); });
+
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add("show");
+            clearTimeout(showToast._t);
+            showToast._t = setTimeout(() => toast.classList.remove("show"), 1600);
+        }
+
+        // ===============================
+        // 3) Tulipanes
+        // ===============================
+        const TULIPS = 11;
+        function rand(a, b) { return a + Math.random() * (b - a); }
+
+        function makeTulip(xPct) {
+            const el = document.createElement("div");
+            el.className = "tulip windy";
+            el.style.left = xPct + "%";
+            el.style.setProperty("--s", (0.82 + Math.random() * 0.55).toFixed(2));
+            el.style.setProperty("--r", ((Math.random() * 10) - 5).toFixed(1) + "deg");
+            el.style.setProperty("--w", (3.2 + Math.random() * 2.2).toFixed(2) + "s");
+            el.dataset.bloom = "0";
+
+            el.innerHTML = `
+        <div class="glow"></div>
+        <div class="head">
+          <div class="petal p2"></div>
+          <div class="petal"></div>
+          <div class="petal p3"></div>
+        </div>
+        <div class="stem"></div>
+        <div class="leaf left"></div>
+        <div class="leaf right"></div>
+      `;
+
+            el.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const blooming = el.dataset.bloom === "1";
+                el.dataset.bloom = blooming ? "0" : "1";
+                const rect = garden.getBoundingClientRect();
+                const cx = rect.left + (rect.width * (parseFloat(el.style.left) / 100));
+                const cy = rect.top + rect.height * 0.55;
+                burst(cx, cy, blooming ? 10 : 18);
+                showToast(blooming ? "Tulipán tranquilo 🌙" : "Tulipán en flor ✨");
+            });
+
+            return el;
+        }
+
+        function layoutTulips() {
+            garden.querySelectorAll(".tulip").forEach(n => n.remove());
+            const xs = [];
+            for (let i = 0; i < TULIPS; i++) {
+                const pct = 8 + (84 * (i / (TULIPS - 1))) + (Math.random() * 3 - 1.5);
+                xs.push(Math.max(4, Math.min(96, pct)));
+            }
+            xs.sort((a, b) => a - b).forEach(xPct => garden.appendChild(makeTulip(xPct)));
+        }
+        qs("#shuffle").addEventListener("click", () => { layoutTulips(); showToast("Reordenado 🌷"); });
+        layoutTulips();
+
+        // ===============================
+        // 4) Fondo interactivo (canvas)
+        // ===============================
+        const canvas = qs("#bg");
+        const ctx = canvas.getContext("2d", { alpha: true });
+
+        let W = 0, H = 0, DPR = 1;
+        const pointer = { x: 0, y: 0 };
+        const particles = [];
+        const hearts = [];
+
+        function resize() {
+            DPR = Math.min(2, window.devicePixelRatio || 1);
+            W = Math.floor(window.innerWidth);
+            H = Math.floor(window.innerHeight);
+            canvas.width = Math.floor(W * DPR);
+            canvas.height = Math.floor(H * DPR);
+            canvas.style.width = W + "px";
+            canvas.style.height = H + "px";
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        }
+        window.addEventListener("resize", resize);
+        resize();
+
+        function seedParticles() {
+            particles.length = 0;
+            const n = Math.floor((W * H) / 18000);
+            for (let i = 0; i < n; i++) {
+                particles.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    r: rand(0.8, 2.2),
+                    s: rand(0.12, 0.55),
+                    p: rand(0, Math.PI * 2),
+                    drift: rand(0.4, 1.2)
+                });
+            }
+        }
+        seedParticles();
+        window.addEventListener("resize", seedParticles);
+
+        function onMove(clientX, clientY) {
+            pointer.x = clientX;
+            pointer.y = clientY;
+        }
+
+        window.addEventListener("mousemove", (e) => onMove(e.clientX, e.clientY), { passive: true });
+        window.addEventListener("touchmove", (e) => {
+            if (!e.touches[0]) return;
+            onMove(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+
+        let lastTap = 0;
+        function doubleAction(x, y) {
+            for (let i = 0; i < 18; i++) hearts.push(makeHeart(x, y));
+            burst(x, y, 28);
+        }
+        window.addEventListener("dblclick", (e) => doubleAction(e.clientX, e.clientY));
+        window.addEventListener("touchend", (e) => {
+            const now = Date.now();
+            if (now - lastTap < 320) {
+                const t = e.changedTouches[0];
+                if (t) doubleAction(t.clientX, t.clientY);
+            }
+            lastTap = now;
+        }, { passive: true });
+
+        function makeHeart(x, y) {
+            const a = rand(0, Math.PI * 2);
+            const sp = rand(1.2, 3.4);
+            return { x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - rand(0.8, 2.2), life: rand(55, 95), size: rand(8, 16), rot: rand(-0.8, 0.8), spin: rand(-0.08, 0.08), alpha: 1 };
+        }
+
+        function burst(x, y, count) {
+            for (let i = 0; i < count; i++) {
+                particles.push({ x, y, r: rand(0.9, 2.6), s: rand(1.2, 3.6), p: rand(0, Math.PI * 2), drift: rand(0.2, 0.8), burst: true, life: rand(22, 48) });
+            }
+        }
+
+        function drawHeart(h) {
+            ctx.save();
+            ctx.translate(h.x, h.y);
+            ctx.rotate(h.rot);
+            ctx.globalAlpha = h.alpha;
+            const s = h.size;
+            ctx.beginPath();
+            ctx.moveTo(0, s * 0.35);
+            ctx.bezierCurveTo(s * 0.65, -s * 0.15, s * 0.85, s * 0.65, 0, s);
+            ctx.bezierCurveTo(-s * 0.85, s * 0.65, -s * 0.65, -s * 0.15, 0, s * 0.35);
+            ctx.closePath();
+            const grad = ctx.createRadialGradient(0, 0, 1, 0, 0, s * 1.2);
+            grad.addColorStop(0, "rgba(255,106,213,0.9)");
+            grad.addColorStop(1, "rgba(165,92,255,0.0)");
+            ctx.fillStyle = grad;
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function tick() {
+            ctx.clearRect(0, 0, W, H);
+
+            const gx = pointer.x || W * 0.5;
+            const gy = pointer.y || H * 0.4;
+            const haloR = 210;
+
+            const halo = ctx.createRadialGradient(gx, gy, 0, gx, gy, haloR);
+            halo.addColorStop(0, `rgba(165,92,255,0.16)`);
+            halo.addColorStop(0.55, `rgba(255,106,213,0.10)`);
+            halo.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = halo;
+            ctx.fillRect(0, 0, W, H);
+
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+
+                if (p.burst) {
+                    p.life -= 1;
+                    p.x += Math.cos(p.p) * p.s;
+                    p.y += Math.sin(p.p) * p.s;
+                    p.s *= 0.98;
+                    const a = Math.max(0, Math.min(1, p.life / 40));
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(213,179,255,${0.40 * a})`;
+                    ctx.fill();
+                    if (p.life <= 0) { particles.splice(i, 1); i--; }
+                    continue;
+                }
+
+                p.p += 0.006 * p.drift;
+                const dx = (gx - W / 2) * 0.0008 * p.drift;
+                const dy = (gy - H / 2) * 0.0008 * p.drift;
+
+                p.x += Math.cos(p.p) * p.s + dx;
+                p.y += Math.sin(p.p * 0.8) * p.s + dy;
+
+                if (p.x < -40) p.x = W + 40;
+                if (p.x > W + 40) p.x = -40;
+                if (p.y < -40) p.y = H + 40;
+                if (p.y > H + 40) p.y = -40;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(213,179,255,0.20)`;
+                ctx.fill();
+            }
+
+            for (let i = 0; i < hearts.length; i++) {
+                const h = hearts[i];
+                h.life -= 1;
+                h.rot += h.spin;
+                h.vy += 0.03;
+                h.x += h.vx;
+                h.y += h.vy;
+                h.alpha = Math.max(0, Math.min(1, h.life / 95));
+                drawHeart(h);
+                if (h.life <= 0) { hearts.splice(i, 1); i--; }
+            }
+
+            requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+
+        garden.addEventListener("click", (e) => {
+            const x = e.clientX, y = e.clientY;
+            for (let i = 0; i < 8; i++) hearts.push(makeHeart(x, y));
+            burst(x, y, 16);
+        });
+
+        pointer.x = window.innerWidth * 0.5;
+        pointer.y = window.innerHeight * 0.35;
+
+        // ===============================
+        // 5) Music box logic
+        // ===============================
+        const audio = qs("#audio");
+        const playBtn = qs("#playBtn");
+        const muteBtn = qs("#muteBtn");
+        const seek = qs("#seek");
+        const timeEl = qs("#time");
+        const disc = qs("#disc");
+        const trackHint = qs("#trackHint");
+
+        function fmt(t) {
+            if (!isFinite(t)) return "0:00";
+            const m = Math.floor(t / 60);
+            const s = Math.floor(t % 60).toString().padStart(2, "0");
+            return `${m}:${s}`;
+        }
+
+        async function togglePlay() {
+            try {
+                if (audio.paused) {
+                    await audio.play();
+                    playBtn.textContent = "⏸️";
+                    disc.classList.add("spin");
+                    trackHint.textContent = "Reproduciendo…";
+                    showToast("Música ON 🎶");
+                } else {
+                    audio.pause();
+                    playBtn.textContent = "▶️";
+                    disc.classList.remove("spin");
+                    trackHint.textContent = "En pausa";
+                    showToast("Música pausa ⏸️");
+                }
+            } catch {
+                showToast("No pude reproducir. Verifica music.mp3 y pulsa ▶️ otra vez.");
+            }
+        }
+
+        playBtn.addEventListener("click", togglePlay);
+
+        muteBtn.addEventListener("click", () => {
+            audio.muted = !audio.muted;
+            muteBtn.textContent = audio.muted ? "🔇" : "🔊";
+            showToast(audio.muted ? "Mute 🔇" : "Sonido 🔊");
+        });
+
+        let seeking = false;
+        seek.addEventListener("input", () => {
+            seeking = true;
+            const pct = seek.value / 1000;
+            if (isFinite(audio.duration)) {
+                audio.currentTime = pct * audio.duration;
+            }
+        });
+        seek.addEventListener("change", () => seeking = false);
+
+        audio.addEventListener("loadedmetadata", () => {
+            timeEl.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
+        });
+
+        audio.addEventListener("timeupdate", () => {
+            if (!seeking && isFinite(audio.duration)) {
+                seek.value = Math.floor((audio.currentTime / audio.duration) * 1000);
+            }
+            timeEl.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
+        });
+    </script>
+</body>
+
+</html>
