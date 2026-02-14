@@ -719,14 +719,34 @@
                 border-radius: 18px;
             }
 
+            .music-title{
+                width: 100%;
+                justify-content: center;
+              }
+            
+              /* el contenedor del texto debe expandirse */
+              .music-title > div:last-child{
+                flex: 1 1 auto;
+                min-width: 0;
+                max-width: 100%;
+              }
+            
+              /* texto centrado y ocupando más */
+              .music-title b,
+              .music-title span{
+                text-align: center;
+              }
+            
+              /* opcional: hacer el “disco” más pequeño en móvil */
+              .disc{
+                width: 28px;
+                height: 28px;
+              }
+
             .music-top {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 10px;
-            }
-
-            .music-title {
-                justify-content: center;
             }
 
             .music-actions {
@@ -1211,4 +1231,5 @@ Feliz San Valentín.`;
 
 
 </html>
+
 
